@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practicar el habla con apoyo digital</title>
+<meta name="description" content="Resumen riguroso del artículo sobre un sistema web–móvil de práctica del habla para adultos mayores (Algorithms 2026, 19, 469).">
+
+<!-- ================================================================
+     ESTILOS (CSS)
+     ZONA 1 — EDITAR AQUÍ: colores y medidas. Puedes cambiar los valores
+     (por ejemplo un color HEX) sin riesgo. Mantén buen contraste.
+     ================================================================ -->
+<style>
+/* ===== EDITAR AQUÍ: colores, tipografías y medidas ===== */
+:root{
+  --crema:#f8f3eb;      /* fondo de la página */
+  --blanco:#ffffff;     /* tarjetas */
+  --tinta:#080331;      /* texto principal */
+  --piedra:#333333;     /* texto secundario */
+  --indigo:#4865ff;     /* SOLO el botón principal (texto blanco) */
+  --rosa:#f098d7;       /* tarjeta tintada de interpretación */
+  --petalo:#ffaefe;     /* decoración */
+  --ember:#ff6d39;      /* decoración */
+  --lavanda:#a2baff;    /* decoración */
+  --bosque:#328a3b;     /* decoración (nunca con texto) */
+  --info:#dce4fb;       /* etiquetas informativas */
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+/* ===== NO TOCAR DESDE AQUÍ: estructura y aspecto base ===== */
+:root{
+  --sombra:rgba(75,68,57,.1) 0 12px 24px 0, rgba(75,68,57,.1) 0 48px 48px 0;
+  --sombra-suave:rgba(75,68,57,.05) 0 4px 4px 0, rgba(75,68,57,.08) 0 16px 16px 0;
+  --u:8px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--crema);color:var(--tinta);font-family:var(--sans);font-size:1rem;line-height:1.6;font-weight:400;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;color:var(--tinta)}
+h1{font-size:clamp(2.5rem,9vw,4rem);line-height:1}
+h2{font-size:clamp(2rem,6vw,3rem);line-height:1.1}
+h3{font-size:1.5rem;line-height:1.3}
+p{margin:0 0 16px}
+a{color:var(--tinta);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--tinta);outline-offset:3px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--blanco);padding:12px 16px;border-radius:1600px;z-index:20}
+.skip:focus{left:16px}
+
+/* Barra de navegación flotante */
+.nav{position:sticky;top:12px;z-index:10;margin:12px auto 0;max-width:1200px;padding:0 16px}
+.nav ul{list-style:none;margin:0 auto;padding:4px;display:flex;justify-content:center;gap:4px;background:var(--blanco);border-radius:1600px;box-shadow:var(--sombra-suave);max-width:560px}
+.nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:1600px;text-decoration:none;font-weight:500;font-size:1rem;white-space:nowrap}
+.nav a:hover,.nav a[aria-current="true"]{background:var(--info)}
+
+/* Etiquetas y botón */
+.badge{display:inline-block;background:var(--info);color:var(--tinta);border-radius:1600px;padding:10px 20px;font-size:1rem;font-weight:500;line-height:1.3}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:12px 32px;border-radius:1600px;background:var(--indigo);color:#fff;font-family:var(--sans);font-size:1.25rem;font-weight:500;text-decoration:none;box-shadow:var(--sombra)}
+.btn:hover{filter:brightness(.92)}
+.btn:focus-visible{outline-color:var(--tinta)}
+
+/* Secciones */
+section{padding:64px 0}
+.head{text-align:center;max-width:760px;margin:0 auto 40px}
+.head .badge{margin-bottom:24px}
+.head h2{margin-bottom:16px}
+.lead{font-size:1.25rem;line-height:1.5;color:var(--piedra)}
+.hero{padding:48px 0 32px;text-align:center}
+.hero .badge{margin-bottom:24px}
+.hero h1{max-width:880px;margin:0 auto 24px}
+.hero .lead{max-width:720px;margin:0 auto 32px}
+.nota{font-size:1rem;color:var(--piedra);margin-top:24px}
+.deco{display:block;width:100%;height:auto;max-height:240px;margin-top:40px}
+
+/* Tarjetas */
+.grid{display:grid;gap:24px}
+.card{background:var(--blanco);border-radius:16px;padding:32px;box-shadow:var(--sombra-suave)}
+.card h3{margin-bottom:16px}
+.etq{display:block;font-size:1rem;font-weight:500;color:var(--piedra);margin-bottom:8px;line-height:1.4}
+.pasos{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:12px}
+.pasos li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+.pasos .n{width:44px;height:44px;border-radius:50%;background:var(--info);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.25rem}
+.pasos strong{font-weight:500}
+.tint{background:var(--rosa);border-radius:16px;padding:24px;margin-top:8px}
+.tint .etq{color:var(--tinta)}
+.tint p:last-child{margin:0}
+
+/* Cifras */
+.cifra{font-family:var(--serif);font-weight:400;font-size:clamp(3.5rem,13vw,5rem);line-height:1;margin:8px 0}
+.cifra small{font-family:var(--sans);font-size:1.25rem;color:var(--piedra);margin-left:8px}
+.sq{display:grid;grid-template-columns:repeat(25,1fr);gap:3px;margin:16px 0 8px}
+.sq span{display:block;aspect-ratio:1;border-radius:3px}
+.sq .f{background:var(--tinta)}
+.sq .e{background:var(--blanco);border:2px solid var(--tinta)}
+.barra{position:relative;height:20px;border:2px solid var(--tinta);border-radius:1600px;overflow:hidden;margin:16px 0 4px;background:var(--blanco)}
+.barra i{position:absolute;left:0;top:0;bottom:0;width:86%;background:var(--tinta)}
+.esc{display:flex;justify-content:space-between;color:var(--piedra);font-size:1rem}
+.cols{display:grid;gap:24px;margin-top:24px}
+
+/* Listas y pie */
+ul.lista{margin:0;padding:0;list-style:none}
+ul.lista li{padding:12px 0;border-top:1px solid rgba(8,3,49,.18)}
+ul.lista li:first-child{border-top:0;padding-top:0}
+.ref{font-size:1rem;color:var(--piedra)}
+.enlace{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+footer{padding:32px 0 64px;text-align:center;color:var(--piedra)}
+
+@media (min-width:768px){
+  .wrap,.nav{padding:0 32px}
+  .grid.dos{grid-template-columns:1fr 1fr}
+  .grid.tres{grid-template-columns:repeat(3,1fr)}
+  .cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){.nav a{padding:0 8px}.card{padding:24px}}
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     NO TOCAR DESDE AQUÍ: enlace de salto y barra de navegación
+     ================================================================ -->
+<a class="skip" href="#inicio">Saltar al contenido</a>
+<nav class="nav" aria-label="Secciones de la página">
+  <ul>
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#solucion">Solución</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="#limites">Límites</a></li>
+  </ul>
+</nav>
+
+<!-- ================================================================
+     EDITAR AQUÍ: TEXTOS, CIFRAS Y ENLACES.
+     Cambia solo el texto que está entre las etiquetas; no borres las
+     etiquetas ni los nombres de clase (class="...").
+     Todas las cifras proceden del artículo original.
+     ================================================================ -->
+<main>
+
+<!-- ---------- 1. INICIO ---------- -->
+<section id="inicio" class="hero" aria-labelledby="t-inicio">
+  <div class="wrap">
+    <span class="badge">Algorithms 2026, 19, 469</span>
+    <h1 id="t-inicio">Practicar el habla con apoyo digital</h1>
+    <p class="lead">Prototipo web–móvil con reconocimiento de voz para adultos mayores, y su evaluación exploratoria.</p>
+    <a class="btn" href="https://doi.org/10.3390/a19060469" target="_blank" rel="noopener noreferrer">Leer el artículo original</a>
+    <p class="nota">Resumen del artículo de Llerena, Rodríguez, Vásquez, Castro y Herrera. Las cifras y afirmaciones proceden del artículo.</p>
+    <!-- NO TOCAR: dibujo decorativo en SVG -->
+    <svg class="deco" viewBox="0 0 1200 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <circle cx="90" cy="130" r="100" fill="#f098d7"/><circle cx="90" cy="130" r="58" fill="#f8f3eb"/>
+      <circle cx="330" cy="150" r="70" fill="#ff6d39"/>
+      <circle cx="520" cy="110" r="44" fill="#ffaefe"/>
+      <circle cx="700" cy="150" r="84" fill="#a2baff"/><circle cx="700" cy="150" r="40" fill="#ffffff"/>
+      <circle cx="890" cy="120" r="52" fill="#328a3b"/>
+      <circle cx="1060" cy="150" r="92" fill="#f098d7"/><circle cx="1060" cy="150" r="48" fill="#ffffff"/>
+      <circle cx="1180" cy="80" r="40" fill="#ff6d39"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ---------- 2. PROBLEMA Y SOLUCIÓN ---------- -->
+<section id="solucion" aria-labelledby="t-solucion">
+  <div class="wrap">
+    <div class="head">
+      <span class="badge">Problema y solución</span>
+      <h2 id="t-solucion">Un sistema integrado para practicar fuera de la clínica</h2>
+    </div>
+    <div class="grid dos">
+      <article class="card">
+        <h3>El problema</h3>
+        <p>El envejecimiento puede alterar la articulación, la fluidez verbal y el ritmo del habla, incluso en adultos mayores sin enfermedades neurodegenerativas.</p>
+        <p>Según los autores, faltan soluciones de ingeniería integradas para practicar el habla de forma estructurada y autónoma en entornos no clínicos. No identificaron propuestas web–móvil que combinen ejercicios de pronunciación, retroalimentación inmediata, monitoreo continuo y gamificación para este grupo.</p>
+      </article>
+      <article class="card">
+        <h3>La solución</h3>
+        <ol class="pasos">
+          <li><span class="n" aria-hidden="true">1</span><span><strong>App móvil (Flutter)</strong> para el adulto mayor, con ejercicios de pronunciación por niveles.</span></li>
+          <li><span class="n" aria-hidden="true">2</span><span><strong>Reconocimiento de voz en la nube</strong> con Google Speech-to-Text.</span></li>
+          <li><span class="n" aria-hidden="true">3</span><span><strong>Decisión basada en reglas:</strong> coincidencia exacta del texto reconocido con el esperado, tras normalizarlo.</span></li>
+          <li><span class="n" aria-hidden="true">4</span><span><strong>Retroalimentación auditiva y visual;</strong> nivel y repetición según lo configurado por el cuidador.</span></li>
+        </ol>
+        <p><strong>Plataforma web</strong> (Next.js, React, Tailwind CSS) para el cuidador. <strong>Backend</strong> con Node.js y Express (autenticación, lógica de negocio y procesamiento del habla) y base de datos PostgreSQL.</p>
+        <div class="tint">
+          <span class="etq">Aclaración de los autores</span>
+          <p>No introducen un nuevo algoritmo de reconocimiento de voz: su aportación es integrar evaluación basada en reglas, retroalimentación multimodal, control de progresión y monitoreo del cuidador.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- 3. RESULTADOS ---------- -->
+<section id="resultados" aria-labelledby="t-resultados">
+  <div class="wrap">
+    <div class="head">
+      <span class="badge">Resultados</span>
+      <h2 id="t-resultados">Qué se midió y qué se encontró</h2>
+      <p class="lead">Evaluación con cinco adultos mayores y sus cuidadores: 50 intentos de pronunciación y una escala de usabilidad.</p>
+    </div>
+    <div class="grid tres">
+      <article class="card">
+        <span class="etq">Latencia media · 50 intentos</span>
+        <p class="cifra">1.82<small>s</small></p>
+        <p>Desviación estándar: SD = 0.41 s.</p>
+      </article>
+      <article class="card">
+        <span class="etq">Precisión de reconocimiento</span>
+        <p class="cifra">90 %</p>
+        <div class="sq" role="img" aria-label="45 aciertos de 50 intentos"><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="f"></span><span class="e"></span><span class="e"></span><span class="e"></span><span class="e"></span><span class="e"></span></div>
+        <p>45 de 50 intentos reconocidos correctamente.</p>
+      </article>
+      <article class="card">
+        <span class="etq">Usabilidad · System Usability Scale (SUS) · 5 cuidadores</span>
+        <p class="cifra">86.00<small>puntos</small></p>
+        <div class="barra" role="img" aria-label="86 puntos en una escala de 0 a 100"><i></i></div>
+        <div class="esc"><span>0</span><span>escala 0–100</span><span>100</span></div>
+        <p>SD = 2.85.</p>
+      </article>
+    </div>
+    <div class="cols">
+      <article class="card">
+        <h3>Observación con cinco díadas</h3>
+        <p>Con la técnica Thinking Aloud (pensar en voz alta) se registraron dificultades puntuales: ayuda inicial para comenzar el primer ejercicio, confusión al navegar la pantalla principal, dificultad para leer texto pequeño y pausas frecuentes al hablar. Una díada no tuvo dificultades.</p>
+      </article>
+      <article class="card">
+        <h3>Interpretación</h3>
+        <div class="tint">
+          <span class="etq">Interpretan los autores</span>
+          <p>La interacción es fluida, la precisión es aceptable para la práctica guiada y la usabilidad es alta, dentro del rango «excelente» de la SUS.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- 4. LÍMITES Y FUENTE ---------- -->
+<section id="limites" aria-labelledby="t-limites">
+  <div class="wrap">
+    <div class="head">
+      <span class="badge">Límites y fuente</span>
+      <h2 id="t-limites">Cómo leer estas cifras</h2>
+    </div>
+    <div class="grid dos">
+      <article class="card">
+        <h3>Limitaciones declaradas</h3>
+        <ul class="lista">
+          <li>Estudio exploratorio con muestra reducida: cinco díadas, cinco cuidadores y 50 intentos.</li>
+          <li>Evaluación técnica en condiciones controladas: red inalámbrica estable y sin ruido de fondo artificial.</li>
+          <li>Sin tamizaje cognitivo formal: la ausencia de enfermedad neurodegenerativa se estableció por reportes de cuidadores y registros institucionales.</li>
+          <li>El 90 % de precisión no debe interpretarse como referente de robustez del reconocimiento de voz.</li>
+          <li>Sin mecanismos específicos de gestión de latencia.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Trabajo futuro</h3>
+        <p>Evaluaciones longitudinales, comparación con otros servicios de reconocimiento de voz, métricas objetivas del habla (tasa de error de palabras y de oraciones) y análisis con conjuntos de datos mayores.</p>
+        <h3>Fuente</h3>
+        <p class="ref">Llerena, L.; Rodríguez, N.; Vásquez, B.; Castro, J.W.; Herrera, A. Voice-Driven Support System for Speech Practice in Older Adults: An Accessible Web–Mobile Approach. <em>Algorithms</em> 2026, 19, 469. Licencia CC BY.</p>
+        <p><a class="enlace" href="https://doi.org/10.3390/a19060469" target="_blank" rel="noopener noreferrer">doi:10.3390/a19060469</a></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap"><p>Resumen divulgativo del artículo original. Para el detalle completo, consulta la fuente.</p></div>
+</footer>
+
+<!-- ================================================================
+     NO TOCAR DESDE AQUÍ: JavaScript opcional.
+     Solo resalta en la barra la sección que estás viendo. La página se
+     lee completa aunque este script falle o esté desactivado.
+     ================================================================ -->
+<script>
+(function(){
+  try{
+    if(!('IntersectionObserver' in window)) return;
+    var links={};
+    document.querySelectorAll('.nav a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a;});
+    var obs=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          Object.keys(links).forEach(function(k){links[k].removeAttribute('aria-current');});
+          if(links[e.target.id]) links[e.target.id].setAttribute('aria-current','true');
+        }
+      });
+    },{rootMargin:'-40% 0px -55% 0px'});
+    Object.keys(links).forEach(function(id){var s=document.getElementById(id); if(s) obs.observe(s);});
+  }catch(err){}
+})();
+</script>
+</body>
+</html>
